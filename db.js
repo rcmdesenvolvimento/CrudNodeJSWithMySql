@@ -3,6 +3,7 @@
     Data          : 24/10/2023 
 */
 
+const axios = require("axios").default;
 const mysql = require('mysql2/promise');
 const client = mysql.createPool(process.env.CONNECTION_STRING);
 
@@ -32,7 +33,27 @@ async function deleteCustomer(id) {
     return await client.query('DELETE FROM clientes where id=?;', [id]);
 };
 
+const getEndereco = async (cep) => {
+    try {
+        const viaCepURL = `https://brasilapi.com.br/api/cep/v1/22710310`;
+        const { data } = await axios.get(viaCepURL)
+        return data
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+async function getEndereco2(cep) {
+    try {
+        const viaCepURL = `https://brasilapi.com.br/api/cep/v1/${cep}`;
+        const { data } = await axios.get(viaCepURL);
+        return data;
+    } catch (error) {
+        console.error(error)
+    }
+}
+
 module.exports = {
-    selectCustomers, selectCustomer,
+    selectCustomers, selectCustomer, getEndereco, getEndereco2,
     insertCustomer, updateCustomer, deleteCustomer
 }

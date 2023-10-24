@@ -8,6 +8,7 @@ require("dotenv").config();
 const express = require('express');
 const app = express();
 const db = require("./db.js")
+
 const port = process.env.PORT;
 
 app.use(express.json());
@@ -38,6 +39,20 @@ app.delete("/clientes/:id", async (req, res) => {
     const cliente = await db.deleteCustomer(req.params.id);
     res.sendStatus(204);
 });
+
+//Busca Cep
+app.get('/cep/:cep', async (req, res) => {
+    // try {
+    //     const resultado = await fetch(URL);
+    //     req.oexchange = await resultado.json();
+    //     res.status(200).json(req.oexchange);
+    // } catch (e) {
+    //     res.status(500).json({ errors: [{ location: 'cep', msg: 'Houve um erro ao acessar a api CEP Brasil.' }] });
+    // }
+
+    const cliente = await db.getEndereco2(req.params.cep);
+    res.json(cliente);
+})
 
 //inicia o servidor
 app.listen(port);
