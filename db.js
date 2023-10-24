@@ -7,14 +7,22 @@ const axios = require("axios").default;
 const mysql = require('mysql2/promise');
 const client = mysql.createPool(process.env.CONNECTION_STRING);
 
+//const client = require("./database/conexao_db.js");
+global.db = require('././database/conexao_db.js');
+
+
 async function selectCustomers() {
-    const res = await client.query('SELECT * FROM clientes');
-    return res[0];
+    //const res = await client.query('SELECT * FROM clientes');
+    const conn = await global.db.connect();
+    const [rows] = await conn.query('SELECT * FROM clientes');
+    return rows;
 }
 
 async function selectCustomer(id) {
-    const res = await client.query("SELECT * FROM Clientes WHERE id=?", [id]);
-    return res[0];
+    const conn = await global.db.connect();
+    const [row] = await conn.query("SELECT * FROM Clientes WHERE id=?", [id]);
+    //const res = await client.query("SELECT * FROM Clientes WHERE id=?", [id]);
+    return row;
 }
 
 async function insertCustomer(cliente) {
@@ -57,3 +65,4 @@ module.exports = {
     selectCustomers, selectCustomer, getEndereco, getEndereco2,
     insertCustomer, updateCustomer, deleteCustomer
 }
+

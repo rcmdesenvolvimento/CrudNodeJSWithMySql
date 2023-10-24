@@ -51,6 +51,7 @@ app.get('/cep/:cep', async (req, res) => {
     // }
 
     const cliente = await db.getEndereco2(req.params.cep);
+    console.log(cliente);
     res.json(cliente);
 })
 
